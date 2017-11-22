@@ -57,9 +57,9 @@ print("considering", nGal)
 #allivar = n.loadtxt(os.path.join('..', 'archetypes_v0', "allivar.txt") )
 #masterwave = n.loadtxt(os.path.join('..', 'archetypes_v0', "masterwave.txt"))
 
-allflux = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "allflux"+name+".txt") )
-allivar = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "allivar"+name+".txt") )
-masterwave = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "masterwave"+name+".txt"))
+allflux = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "allflux_"+name+".txt") )
+allivar = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "allivar_"+name+".txt") )
+masterwave = n.loadtxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "masterwave_"+name+".txt"))
 
 print("interpolates on the common grid")
 index_wave_all = n.searchsorted(masterwave, [2400., 6200.])
@@ -136,6 +136,7 @@ for i in n.arange(iarchetype.size):
 #cPickle.dum
 
 imax = n.max(isort)
+print('imax', imax)
 p.clf()
 fig = p.figure(figsize=(10,imax*5))
 fig.subplots_adjust(hspace=0)
@@ -151,7 +152,8 @@ for i in n.arange(0,imax,1):
 	ax.grid()
 
 #fig.set_xticks([2000, 3000, 4000, 5000])
-fig.savefig(os.path.join(os.environ['HOME'], 'wwwDir', 'sdss', 'elg', 'test.png'))
+fig.savefig(os.path.join(os.environ['OBS_REPO'], 'archetypes', "archetypes_"+name+".txt"))
+#fig.savefig(os.path.join(os.environ['HOME'], 'wwwDir', 'sdss', 'elg', 'test.png'))
 p.clf()
 
 n.savetxt(os.path.join(os.environ['OBS_REPO'], 'archetypes', "archetypes_"+name+".txt")   , n.vstack((masterwave, tmpmedian)))
