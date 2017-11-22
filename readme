@@ -1,0 +1,13 @@
+
+ELG summary file
+
+os.path.join(os.environ['OBS_REPO'], 'SDSS/ELG/eboss21/cats/eboss21.v5_10_7.latest.fits')
+
+SDSS spectra
+
+os.path.join(os.environ['HOME'], 'SDSS', 'v5_10_7', str(plate).zfill(4), "spec-"+str(plate).zfill(4)+"-"+str(mjd).zfill(5)+"-"+str(fiberid).zfill(4)+".fits" )
+
+Writes archetypes here :
+
+$OBS_REPO/archetypes
+
