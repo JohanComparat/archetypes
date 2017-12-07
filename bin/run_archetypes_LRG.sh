@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-python3.4 construct_archetypes.py -0.1 0.001 LRG 2.
-python3.4 construct_archetypes.py 0.001 0.1  LRG 2.
+#python3.4 construct_archetypes.py -0.1 0.001 LRG 2.
+#python3.4 construct_archetypes.py 0.001 0.1  LRG 2.
 python3.4 construct_archetypes.py 0.1 0.2    LRG 2.
 python3.4 construct_archetypes.py 0.2 0.3    LRG 2.
 python3.4 construct_archetypes.py 0.3 0.4    LRG 2.
