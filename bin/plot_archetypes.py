@@ -18,8 +18,8 @@ import pickle
 version = 'v3'
 
 # parameters of the run
-zmin = float(sys.argv[1])
-zmax = float(sys.argv[2])
+zmin = sys.argv[1]
+zmax = sys.argv[2]
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 Nspec_max = 2000.
@@ -29,7 +29,8 @@ print(gal_type)
 print(name)
 sn_min = float(sys.argv[4])
 
-
+zmin = float(zmin)
+zmax = float(zmax)
 
 out_dir = os.path.join( os.environ['OBS_REPO'], 'archetypes', version, gal_type )
 
