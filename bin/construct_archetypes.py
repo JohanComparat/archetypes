@@ -12,7 +12,7 @@ from scipy.stats import scoreatpercentile
 import os
 import pickle
 
-version = 'v2'
+version = 'v3'
 
 # parameters of the run
 zmin = float(sys.argv[1])
