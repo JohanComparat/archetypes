@@ -11,14 +11,17 @@ import pickle
 version = 'v3'
 
 # parameters of the run
-zmin = float(sys.argv[1])
-zmax = float(sys.argv[2])
+zmin = sys.argv[1]
+zmax = sys.argv[2]
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 
 Nspec_max = 2000.
 
 name = "sdss_"+gal_type+"_zmin_"+str(zmin)+"_zmax_"+str(zmax)+"_Nlt_"+str(Nspec_max)
+
+zmin = float(zmin)
+zmax = float(zmax)
 
 wlmin = 3700.
 wlmax = 9000.
@@ -75,11 +78,7 @@ if gal_type=='X_no_BL':
 	#(cat['SOURCETYPE']=='QSO_XD_KDE_PAIR')|
 	(cat['SOURCETYPE']=='RADIO_2LOBE_QSO')|
 	#(cat['SOURCETYPE']=='WISE_BOSS_QSO')|
-	(cat['SOURCETYPE']=='TDSS_FES_HYPQSO' )
-	)&
-	(cat['SUBCLASS']!='BROADLINE')&
-	(cat['SUBCLASS']!='STARFORMING BROADLINE')&
-	(cat['SUBCLASS']!='STARBURST BROADLINE')&(cat['SN_MEDIAN_ALL']>2)
+	(cat['SOURCETYPE']=='TDSS_FES_HYPQSO' )	)&(cat['SUBCLASS']!='BROADLINE')&(cat['SUBCLASS']!='STARFORMING BROADLINE')&(cat['SUBCLASS']!='STARBURST BROADLINE')&(cat['SN_MEDIAN_ALL']>2)
 	print(len(cat['Z'][ok_i]))
 	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 

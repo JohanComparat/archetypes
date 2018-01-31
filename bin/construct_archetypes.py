@@ -15,12 +15,15 @@ import pickle
 version = 'v3'
 
 # parameters of the run
-zmin = float(sys.argv[1])
-zmax = float(sys.argv[2])
+zmin = sys.argv[1]
+zmax = sys.argv[2]
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 Nspec_max = 2000.
 name = "sdss_"+gal_type+"_zmin_"+str(zmin)+"_zmax_"+str(zmax)+"_Nlt_"+str(Nspec_max)
+
+zmin = float(zmin)
+zmax = float(zmax)
 
 print(gal_type)
 print(name)

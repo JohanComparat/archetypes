@@ -1,3 +1,4 @@
+import os
 import sys
 import numpy as n
 
@@ -19,4 +20,5 @@ command = lambda zmin, zmax, gal_type : "python3.4 construct_matrices_sdss.py "+
 
 for zmin, zmax in zip(z_all[:-1], z_all[1:]):
 	cm = command(zmin, zmax, gal_tp)
+	print(cm)
 	os.system(cm)
