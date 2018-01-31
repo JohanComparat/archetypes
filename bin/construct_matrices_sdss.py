@@ -27,69 +27,95 @@ wlmax_rf = int(wlmax/(1+zmin))
 d_lambda = 1. 
 masterwave = n.arange(wlmin_rf, wlmax_rf, d_lambda) #0.5)
 
-#if gal_type=='type1':
-#cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
-ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
-(cat['SUBCLASS']=='BROADLINE')|
-(cat['SUBCLASS']=='STARFORMING BROADLINE')|
-(cat['SUBCLASS']=='STARBURST BROADLINE')
-)&(cat['CLASS']=='QSO')
-print(len(cat['Z'][ok_i]))
-print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+if gal_type=='qso_BL':
+	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
+	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
+	(cat['SUBCLASS']=='BROADLINE')|
+	(cat['SUBCLASS']=='STARFORMING BROADLINE')|
+	(cat['SUBCLASS']=='STARBURST BROADLINE')
+	)&(cat['CLASS']=='QSO')&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
-#if gal_type=='type2':
-#cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
-ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
-(cat['SUBCLASS']=='AGN')|
-(cat['SUBCLASS']=='STARFORMING')|
-(cat['SUBCLASS']=='STARBURST')
-)&(cat['CLASS']=='QSO')
-print(len(cat['Z'][ok_i]))
-print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+if gal_type=='qso_t2':
+	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
+	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
+	(cat['SUBCLASS']=='AGN')|
+	(cat['SUBCLASS']=='STARFORMING')|
+	(cat['SUBCLASS']=='STARBURST')
+	)&(cat['CLASS']=='QSO')&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
-ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
-(cat['SUBCLASS']!='BROADLINE')|
-(cat['SUBCLASS']!='STARFORMING BROADLINE')|
-(cat['SUBCLASS']!='STARBURST BROADLINE')
-)&(cat['CLASS']=='QSO')
-print(len(cat['Z'][ok_i]))
-print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+if gal_type=='X_no_BL':
+	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
+	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
+	(cat['SOURCETYPE']=='XMMBRIGHT')|
+	(cat['SOURCETYPE']=='XMMGRIZ')|
+	(cat['SOURCETYPE']=='XMMHR')|
+	(cat['SOURCETYPE']=='XMMRED')|
+	(cat['SOURCETYPE']=='XMM_PRIME')|
+	(cat['SOURCETYPE']=='XMM_SECOND')|
+	(cat['SOURCETYPE']=='SPIDERS_PILOT')|
+	(cat['SOURCETYPE']=='SPIDERS_RASS_AGN')|
+	(cat['SOURCETYPE']=='SPIDERS_XMMSL_AGN')|
+	(cat['SOURCETYPE']=='S82X_TILE1')|
+	(cat['SOURCETYPE']=='S82X_TILE2')|
+	#(cat['SOURCETYPE']=='QSO')|
+	#(cat['SOURCETYPE']=='QSO_EBOSS_W3_ADM')|
+	#(cat['SOURCETYPE']=='QSO_GRI')|
+	#(cat['SOURCETYPE']=='QSO_HIZ')|
+	#(cat['SOURCETYPE']=='QSO_RIZ')|
+	#(cat['SOURCETYPE']=='QSO_VAR')|
+	#(cat['SOURCETYPE']=='QSO_VAR_FPG')|
+	#(cat['SOURCETYPE']=='QSO_VAR_LF')|
+	#(cat['SOURCETYPE']=='QSO_VAR_SDSS')|
+	#(cat['SOURCETYPE']=='QSO_WISE_FULL_SKY')|
+	#(cat['SOURCETYPE']=='QSO_WISE_SUPP')|
+	#(cat['SOURCETYPE']=='QSO_XD_KDE_PAIR')|
+	(cat['SOURCETYPE']=='RADIO_2LOBE_QSO')|
+	#(cat['SOURCETYPE']=='WISE_BOSS_QSO')|
+	(cat['SOURCETYPE']=='TDSS_FES_HYPQSO' )
+	)&
+	(cat['SUBCLASS']!='BROADLINE')&
+	(cat['SUBCLASS']!='STARFORMING BROADLINE')&
+	(cat['SUBCLASS']!='STARBURST BROADLINE')&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
-#if gal_type=='type2_ell':
-#cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
-ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
-(cat['SOURCETYPE']=='XMMBRIGHT')|
-(cat['SOURCETYPE']=='XMMGRIZ')|
-(cat['SOURCETYPE']=='XMMHR')|
-(cat['SOURCETYPE']=='XMMRED')|
-(cat['SOURCETYPE']=='XMM_PRIME')|
-(cat['SOURCETYPE']=='XMM_SECOND')|
-(cat['SOURCETYPE']=='SPIDERS_PILOT')|
-(cat['SOURCETYPE']=='SPIDERS_RASS_AGN')|
-(cat['SOURCETYPE']=='SPIDERS_XMMSL_AGN')|
-(cat['SOURCETYPE']=='S82X_TILE1')|
-(cat['SOURCETYPE']=='S82X_TILE2')|
-(cat['SOURCETYPE']=='QSO')|
-(cat['SOURCETYPE']=='QSO_EBOSS_W3_ADM')|
-(cat['SOURCETYPE']=='QSO_GRI')|
-(cat['SOURCETYPE']=='QSO_HIZ')|
-(cat['SOURCETYPE']=='QSO_RIZ')|
-(cat['SOURCETYPE']=='QSO_VAR')|
-(cat['SOURCETYPE']=='QSO_VAR_FPG')|
-(cat['SOURCETYPE']=='QSO_VAR_LF')|
-(cat['SOURCETYPE']=='QSO_VAR_SDSS')|
-(cat['SOURCETYPE']=='QSO_WISE_FULL_SKY')|
-(cat['SOURCETYPE']=='QSO_WISE_SUPP')|
-(cat['SOURCETYPE']=='QSO_XD_KDE_PAIR')|
-(cat['SOURCETYPE']=='RADIO_2LOBE_QSO')|
-(cat['SOURCETYPE']=='WISE_BOSS_QSO')|
-(cat['SOURCETYPE']=='TDSS_FES_HYPQSO' )
-)&(cat['CLASS']=='GALAXY')
-print(len(cat['Z'][ok_i]))
-print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+if gal_type=='GAL_agn_all':
+	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
+	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
+	(cat['SOURCETYPE']=='XMMBRIGHT')|
+	(cat['SOURCETYPE']=='XMMGRIZ')|
+	(cat['SOURCETYPE']=='XMMHR')|
+	(cat['SOURCETYPE']=='XMMRED')|
+	(cat['SOURCETYPE']=='XMM_PRIME')|
+	(cat['SOURCETYPE']=='XMM_SECOND')|
+	(cat['SOURCETYPE']=='SPIDERS_PILOT')|
+	(cat['SOURCETYPE']=='SPIDERS_RASS_AGN')|
+	(cat['SOURCETYPE']=='SPIDERS_XMMSL_AGN')|
+	(cat['SOURCETYPE']=='S82X_TILE1')|
+	(cat['SOURCETYPE']=='S82X_TILE2')|
+	(cat['SOURCETYPE']=='QSO')|
+	(cat['SOURCETYPE']=='QSO_EBOSS_W3_ADM')|
+	(cat['SOURCETYPE']=='QSO_GRI')|
+	(cat['SOURCETYPE']=='QSO_HIZ')|
+	(cat['SOURCETYPE']=='QSO_RIZ')|
+	(cat['SOURCETYPE']=='QSO_VAR')|
+	(cat['SOURCETYPE']=='QSO_VAR_FPG')|
+	(cat['SOURCETYPE']=='QSO_VAR_LF')|
+	(cat['SOURCETYPE']=='QSO_VAR_SDSS')|
+	(cat['SOURCETYPE']=='QSO_WISE_FULL_SKY')|
+	(cat['SOURCETYPE']=='QSO_WISE_SUPP')|
+	(cat['SOURCETYPE']=='QSO_XD_KDE_PAIR')|
+	(cat['SOURCETYPE']=='RADIO_2LOBE_QSO')|
+	(cat['SOURCETYPE']=='WISE_BOSS_QSO')|
+	(cat['SOURCETYPE']=='TDSS_FES_HYPQSO' )
+	)&(cat['CLASS']=='GALAXY')&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
-
-# gets the eboss elg summary file
 if gal_type == "XAGN":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
 	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(
@@ -104,11 +130,15 @@ if gal_type == "XAGN":
 	  (cat['SOURCETYPE']=='SPIDERS_XMMSL_AGN')|
 	  (cat['SOURCETYPE']=='S82X_TILE1')|
 	  (cat['SOURCETYPE']=='S82X_TILE2')
-	  )
+	  )&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
 if gal_type == "XMMSL":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
 	ok_i=(cat['ZWARNING']==0)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(cat['SOURCETYPE']=='SPIDERS_XMMSL_AGN')
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
 if gal_type == "QSO":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
@@ -127,18 +157,22 @@ if gal_type == "QSO":
 	  (cat['SOURCETYPE']=='QSO_XD_KDE_PAIR')|
 	  (cat['SOURCETYPE']=='RADIO_2LOBE_QSO')|
 	  (cat['SOURCETYPE']=='WISE_BOSS_QSO')|
-	  (cat['SOURCETYPE']=='TDSS_FES_HYPQSO' ) )
-	
+	  (cat['SOURCETYPE']=='TDSS_FES_HYPQSO' ) )&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+
 if gal_type == "ELG":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/ELG/eboss21/cats/eboss21.v5_10_7.latest.fits'))[1].data
 	zQ_min = 2.
-	ok_i=(cat['Z_ZQ']>=zQ_min)&(cat['Z']>zmin)&(cat['Z']<=zmax)
+	ok_i=(cat['Z_ZQ']>=zQ_min)&(cat['Z']>zmin)&(cat['Z']<=zmax)&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
 if gal_type == "LRG":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
-ok_i=(cat['Z']>zmin)&(cat['Z']<=zmax)&((cat['SOURCETYPE']=='LRG')|(cat['SOURCETYPE']=='FAINT_HIZ_LRG')|(cat['SOURCETYPE']=='HIZ_LRG')|(cat['SOURCETYPE']=='LRG_ROUND3'))
-print(len(cat['Z'][ok_i]))
-print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+	ok_i=(cat['Z']>zmin)&(cat['Z']<=zmax)&((cat['SOURCETYPE']=='LRG')|(cat['SOURCETYPE']=='FAINT_HIZ_LRG')|(cat['SOURCETYPE']=='HIZ_LRG')|(cat['SOURCETYPE']=='LRG_ROUND3'))&(cat['SN_MEDIAN_ALL']>2)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 
 
 # mask for the sky lines
