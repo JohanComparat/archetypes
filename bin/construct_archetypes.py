@@ -14,22 +14,18 @@ import pickle
 
 version = 'v3'
 
-# parameters of the run
-zmin = sys.argv[1]
-zmax = sys.argv[2]
+zmin = float(sys.argv[1])
+zmax = float(sys.argv[2])
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
-Nspec_max = 2000.
-name = "sdss_"+gal_type+"_zmin_"+str(zmin)+"_zmax_"+str(zmax)+"_Nlt_"+str(Nspec_max)
 
-zmin = float(zmin)
-zmax = float(zmax)
+Nspec_max = 2000
+
+name = "sdss_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
 
 print(gal_type)
 print(name)
 sn_min = float(sys.argv[4])
-
-
 
 out_dir = os.path.join( os.environ['OBS_REPO'], 'archetypes', version, gal_type )
 
@@ -38,7 +34,7 @@ allflux = n.loadtxt(os.path.join(out_dir, "allflux_"+name+".txt") )
 allivar = n.loadtxt(os.path.join(out_dir, "allivar_"+name+".txt") )
 masterwave = n.loadtxt(os.path.join(out_dir, "masterwave_"+name+".txt"))
 
-print("interpolates on the common grid", time.time()-t0, 's')
+print("interpolates on the common grid", time.time()-t0, 's', allflux.shape)
 index_wave_all = n.searchsorted(masterwave, [masterwave[0]+100,masterwave[-1]-100])
 tmpflux = allflux.T[index_wave_all[0]:index_wave_all[1],:]
 tmpivar = allivar.T[index_wave_all[0]:index_wave_all[1],:]
@@ -67,12 +63,14 @@ newivar = tmpivar
 tmpchi2 = n.zeros((iuse.size, iuse.size))
 A = n.zeros((iuse.size, iuse.size))
 
-print("creates the matrix", time.time()-t0, 's')
+print("creates the matrix", time.time()-t0, 's', newflux.shape)
 tmp_yerr = 1./n.sqrt(newivar[:, iuse].T.reshape(iuse.size, newwave.size))
 tmp_y = newflux[:,iuse].T
 for i in n.arange(iuse.size):
+    #print(i)
     tmp_x = newflux[:, iuse[i]].T.reshape(1,newwave.size)
     tmp_xerr = 1./n.sqrt(newivar[:, iuse[i]].T.reshape(1,newwave.size))
+    #print(tmp_x, tmp_y, tmp_xerr, tmp_yerr)
     A_tmp, chi2_tmp = mathutils.quick_amplitude(tmp_x, tmp_y, tmp_xerr, tmp_yerr)
     A[i,:] = A_tmp
     tmpchi2[i,:] = chi2_tmp
@@ -123,10 +121,12 @@ for i in n.arange(0,imax,1):
 	ax.set_xlim(masterwave[10], masterwave[-10])
 	#ax.set_ylim(-0.1, 3)
 	ax.set_xticks([])
-	ax.axvline(1215, color='b', ls='dashed', label='1215')
-	ax.axvline(2800, color='m', ls='dashed', label='2800')
-	ax.axvline(3727, color='g', ls='dashed', label='3727')
-	ax.axvline(5007, color='r', ls='dashed', label='5007')
+	ax.axvline(1215, color='b', ls='dashed', label='1215 Lya')
+	ax.axvline(1546, color='c', ls='dashed', label='1546 CIV')
+	ax.axvline(2800, color='m', ls='dashed', label='2800 MgII')
+	ax.axvline(3727, color='g', ls='dashed', label='3727 [OII]')
+	ax.axvline(5007, color='r', ls='dashed', label='5007 [OIII]')
+	ax.axvline(6565, color='k', ls='dashed', label='6565 Ha')
 	print(i, n.count_nonzero(a_matrix[:,iarchetype[isort[i]]]))
 	ax.grid()
 	ax.legend(frameon=False, loc=0)
