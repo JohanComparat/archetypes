@@ -14,8 +14,10 @@ gal_tp = sys.argv[1]
 #ELG
 #LRG
 
-#z_all = n.hstack((-0.001, 0.001, n.arange(0.1, 3., 0.2) ))
-z_all = n.arange(0.1, 3., 0.2)
+#z_all = n.hstack((0.001, n.arange(0.1, 3., 0.2) ))
+#z_all = n.arange(0.1, 3., 0.2)
+z_all=n.array([3., 6.])
+
 command = lambda zmin, zmax, gal_type : "run construct_archetypes.py "+str(zmin)+" "+str(zmax)+" "+gal_type+" 3."
 
 for zmin, zmax in zip(z_all[:-1], z_all[1:]):

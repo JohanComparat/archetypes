@@ -8,7 +8,7 @@ import os
 import astropy.io.fits as fits
 import pickle
 
-version = 'v3'
+version = 'v4'
 
 # parameters of the run
 zmin = float(sys.argv[1])
@@ -16,11 +16,11 @@ zmax = float(sys.argv[2])
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 
-Nspec_max = 2000
+Nspec_max = 3000
 
 name = "sdss_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
 
-SN_threshold = 0.5
+SN_threshold = 0.1#0.5
 wlmin = 3700.
 wlmax = 9000.
 wlmin_rf = int(wlmin/(1+zmax))
@@ -167,7 +167,7 @@ if gal_type == "ELG":
 
 if gal_type == "LRG":
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
-	ok_i=(cat['Z']>zmin)&(cat['Z']<=zmax)&((cat['SOURCETYPE']=='LRG')|(cat['SOURCETYPE']=='FAINT_HIZ_LRG')|(cat['SOURCETYPE']=='HIZ_LRG')|(cat['SOURCETYPE']=='LRG_ROUND3'))&(cat['SN_MEDIAN_ALL']>SN_threshold)
+	ok_i=(cat['Z']>zmin)&(cat['Z']<=zmax)&((cat['SOURCETYPE']=='CMASS')|(cat['SOURCETYPE']=='LRG')|(cat['SOURCETYPE']=='FAINT_HIZ_LRG')|(cat['SOURCETYPE']=='HIZ_LRG')|(cat['SOURCETYPE']=='LRG_ROUND3'))&(cat['SN_MEDIAN_ALL']>SN_threshold)
 	print(len(cat['Z'][ok_i]))
 	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
 

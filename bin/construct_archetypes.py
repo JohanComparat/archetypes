@@ -12,14 +12,14 @@ from scipy.stats import scoreatpercentile
 import os
 import pickle
 
-version = 'v3'
+version = 'v4'
 
 zmin = float(sys.argv[1])
 zmax = float(sys.argv[2])
 gal_type = sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 
-Nspec_max = 2000
+Nspec_max = 3000
 
 name = "sdss_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
 
