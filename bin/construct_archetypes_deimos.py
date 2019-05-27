@@ -12,23 +12,31 @@ from scipy.stats import scoreatpercentile
 import os
 import pickle
 
-version = 'v4'
+version = 'v5'
 
-zmin = float(sys.argv[1])
-zmax = float(sys.argv[2])
-gal_type = sys.argv[3]
+# parameters of the run
+zmin = 1. # float(sys.argv[1])
+zmax = 2. # float(sys.argv[2])
+gal_type = 'cosmosagn' # sys.argv[3]
 # ELG, LRG, X_AGN, QSO
 
 Nspec_max = 3000
 
-name = "sdss_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
+name = "deimos_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
+SN_threshold = 0.1#0.5
+wlmin = 6000.
+wlmax = 9500.
+wlmin_rf = int(wlmin/(1+zmax))
+wlmax_rf = int(wlmax/(1+zmin))
+d_lambda = 0.2 
+masterwave = n.arange(wlmin_rf, wlmax_rf, d_lambda) #0.5)
 
-print(gal_type)
-print(name)
-sn_min = float(sys.argv[4])
+sn_min = float(sys.argv[1])
 
 out_dir = os.path.join( os.environ['OBS_REPO'], 'archetypes', version, gal_type )
 
+import time
+t0 = time.time()
 
 allflux = n.loadtxt(os.path.join(out_dir, "allflux_"+name+".txt") )
 allivar = n.loadtxt(os.path.join(out_dir, "allivar_"+name+".txt") )
@@ -50,6 +58,15 @@ tmploglam = n.log10(tmpwave)
 median_sn = n.median( tmpflux*tmpivar, axis=0)
  
 iuse = n.where( median_sn>sn_min)[0]
+print(len(iuse))
+
+p.figure(2, (10,5))
+p.plot(masterwave, n.median(allflux[iuse], axis=0))
+p.title(len(iuse))
+p.xlim((2600,4300))
+p.savefig(os.path.join(out_dir, "figureAll_"+name+"_snMin"+str(sn_min)+".png"))
+p.clf()
+sys.exit()
 
 # smooth the data
 #n_pixels = len(tmpwave)
@@ -81,7 +98,8 @@ chi2 = tmpchi2/(iuse.size-1) # reduced chi2
 #pcs = n.array([16,17,18,19,20,21,22, 23, 24])
 #scrs = scoreatpercentile(n.ravel(chi2), [16,17,18,19,20,21,22, 23, 24])
 
-scr = scoreatpercentile(n.ravel(chi2), 20 )
+#scr = scoreatpercentile(n.ravel(chi2), 20 )
+scr = scoreatpercentile(n.ravel(chi2), 10 )
 
 chi2_min = scr # 0.05 # the minimum distance, the only free paramter
 a_matrix = chi2<chi2_min # relationship matrix
@@ -117,7 +135,7 @@ fig = p.figure(figsize=(10,imax*5))
 fig.subplots_adjust(hspace=0)
 for i in n.arange(0,imax,1):
 	ax = fig.add_subplot(imax+1,1,i+1)
-	ax.plot(masterwave[::3], tmpmedian[isort[i],:][::3] , label = 'nSpec=' + str(n.count_nonzero(a_matrix[:,iarchetype[isort[i]]])) )
+	ax.plot(masterwave[::10], tmpmedian[isort[i],:][::10] , label = 'nSpec=' + str(n.count_nonzero(a_matrix[:,iarchetype[isort[i]]])) )
 	ax.set_xlim(masterwave[10], masterwave[-10])
 	#ax.set_ylim(-0.1, 3)
 	ax.set_xticks([])
@@ -135,6 +153,7 @@ for i in n.arange(0,imax,1):
 fig.savefig(os.path.join(out_dir, "figureArchetypes_"+name+"_snMin"+str(sn_min)+".png"))
 #fig.savefig(os.path.join(os.environ['HOME'], 'wwwDir', 'sdss', 'elg', 'test.png'))
 p.clf()
+
 
 n.savetxt(os.path.join(out_dir, "archetypes_"+name+"_snMin"+str(sn_min)+".txt")   , n.vstack((masterwave, tmpmedian)))
 
