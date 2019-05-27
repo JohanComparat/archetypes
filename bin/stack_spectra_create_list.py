@@ -17,7 +17,7 @@ zmax = float(sys.argv[3])
 #gal_type='qso_BL'
 #zmin = 0.
 #zmax = 0.5
-Nspec_max = 10000
+Nspec_max = 200000
 
 version = 'v1'
 

@@ -1,9 +1,11 @@
 #!/bin/bash
 
-python3.4 run_matrices.py qso_BL
-python3.4 run_matrices.py XAGN
-python3.4 run_matrices.py ELG
-python3.4 run_matrices.py LRG
+python3.4 run_matrices.py v51010_XAGN
+
+# python3.4 run_matrices.py qso_BL
+# python3.4 run_matrices.py XAGN
+# python3.4 run_matrices.py ELG
+# python3.4 run_matrices.py LRG
 
 # python3.4 run_matrices.py XMMSL
 # python3.4 run_matrices.py QSO

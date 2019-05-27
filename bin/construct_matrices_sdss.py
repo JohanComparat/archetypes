@@ -8,7 +8,7 @@ import os
 import astropy.io.fits as fits
 import pickle
 
-version = 'v4'
+version = 'v6'
 
 # parameters of the run
 zmin = float(sys.argv[1])
@@ -27,6 +27,21 @@ wlmin_rf = int(wlmin/(1+zmax))
 wlmax_rf = int(wlmax/(1+zmin))
 d_lambda = 1. 
 masterwave = n.arange(wlmin_rf, wlmax_rf, d_lambda) #0.5)
+
+if gal_type=='v51010_XAGN':
+	print('dr14 vac')
+	cat = fits.open(os.path.join(os.environ['HOME'], 'SDSS/catalogs/2RXS_AllWISE_catalog_paper_2017May26_v51010.fits'))[1].data
+	ok_i = (cat['Z']>zmin) & (cat['Z']<=zmax)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+
+if gal_type=='DR14_AGN_VAC':
+	print('dr14 vac')
+	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/hb_specfit_2RXS_XMMSL_test1.fits'))[1].data
+	ok_i = (cat['Z']>zmin) & (cat['Z']<=zmax)
+	print(len(cat['Z'][ok_i]))
+	print(n.histogram(cat['Z'][ok_i],bins=n.arange(0,3.1,0.5)))
+
 
 if gal_type=='qso_BL':
 	cat = fits.open(os.path.join(os.environ['OBS_REPO'], 'SDSS/dr14/specObj-dr14.fits'))[1].data
@@ -176,7 +191,7 @@ if gal_type == "LRG":
 maskLambda = n.loadtxt(os.path.join(os.environ['GIT_ARCHETYPES'],'data',"dr12-sky-mask.txt"), unpack=True)
 
 get_path_to_spectrum_v5_10_0 = lambda plate, mjd, fiberid : os.path.join(os.environ['HOME'], 'SDSS', 'v5_10_0', 'spectra', str(plate).zfill(4), "spec-"+str(plate).zfill(4)+"-"+str(mjd).zfill(5)+"-"+str(fiberid).zfill(4)+".fits" )
-get_path_to_spectrum_v5_10_7 = lambda plate, mjd, fiberid : os.path.join(os.environ['HOME'], 'SDSS', 'v5_10_7', 'spectra', str(plate).zfill(4), "spec-"+str(plate).zfill(4)+"-"+str(mjd).zfill(5)+"-"+str(fiberid).zfill(4)+".fits" )
+get_path_to_spectrum_v5_10_10 = lambda plate, mjd, fiberid : os.path.join(os.environ['HOME'], 'SDSS', 'v5_10_10', str(plate).zfill(4), "spec-"+str(plate).zfill(4)+"-"+str(mjd).zfill(5)+"-"+str(fiberid).zfill(4)+".fits" )
 get_path_to_spectrum_26 = lambda plate, mjd, fiberid : os.path.join(os.environ['HOME'], 'SDSS', '26', 'spectra', str(plate).zfill(4), "spec-"+str(plate).zfill(4)+"-"+str(mjd).zfill(5)+"-"+str(fiberid).zfill(4)+".fits" )
 
 
@@ -202,7 +217,7 @@ nGal_all = len(ok_i.nonzero()[0])
 print("total", nGal_all)
 if nGal_all > Nspec_max:
     rds = n.random.rand(len(cat))
-    ok = (ok_i)&(rds < Nspec_max / nGal_all)
+    ok = (ok_i)&(rds < Nspec_max*1. / nGal_all)
 else :
     ok = ok_i
     
@@ -218,9 +233,9 @@ allivar = n.zeros( ( nGal, len(masterwave)) )
 
 print("gets the spectra to construct the matrix")
 for index in range(nGal) :# = 0
-	path_1 = get_path_to_spectrum_v5_10_0(cat['PLATE'][ok][index], cat['MJD'][ok][index], cat['FIBERID'][ok][index])
+	path_1 = get_path_to_spectrum_v5_10_10(cat['PLATE'][ok][index], cat['MJD'][ok][index], cat['FIBERID'][ok][index])
 	path_2 = get_path_to_spectrum_26(cat['PLATE'][ok][index], cat['MJD'][ok][index], cat['FIBERID'][ok][index])
-	path_3 = get_path_to_spectrum_v5_10_7(cat['PLATE'][ok][index], cat['MJD'][ok][index], cat['FIBERID'][ok][index])
+	path_3 = get_path_to_spectrum_v5_10_0(cat['PLATE'][ok][index], cat['MJD'][ok][index], cat['FIBERID'][ok][index])
 	choice = n.array([os.path.isfile(path_1), os.path.isfile(path_2), os.path.isfile(path_3)])
 	pathes = n.array([path_1, path_2, path_3])
 	print(pathes, choice)
