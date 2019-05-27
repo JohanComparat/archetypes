@@ -12,7 +12,7 @@ file_list = n.array(glob.glob(os.path.join(spec_dir, 'full_*.asc')))
 def stack_it(specList ):
  outfile = join(spec_dir, os.path.basename(specList)[:-4]+".stack")
  print(outfile)
- test_D = n.loadtxt(specList)
+ test_D = n.loadtxt(specList, unpack=True)
  print(len(test_D[0]))
  if len(test_D[0])>10:
   stack=sse.SpectraStackingEBOSS(specList, outfile, l_start=3., l_end=4. )
