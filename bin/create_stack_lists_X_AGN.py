@@ -13,7 +13,10 @@ version = 'v1'
 zmins = n.hstack((0., 0.005, n.arange(0.1,3.0,0.1) ))
 zmaxs = n.hstack((0.005, n.arange(0.,3.0,0.1)+0.5))
 
-path_2_cats = os.path.join(os.environ['HOME'], 'data', 'spiders', 'agn')
+# on laptop
+#path_2_cats = os.path.join(os.environ['HOME'], 'data', 'spiders', 'agn')
+# on servers
+path_2_cats = os.path.join(os.environ['HOME'], 'data1/SDSS/dr16/spiders')
 path_2_stack_lists = os.path.join(os.environ['HOME'], 'SDSS/stacks/X_AGN')
 
 # 4 catalogs 
