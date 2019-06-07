@@ -12,20 +12,42 @@ from scipy.stats import scoreatpercentile
 import os
 import pickle
 
-version = 'v6'
+version = 'v1'
+sdss_dir = os.path.join(os.environ['HOME'], "SDSS")
+stack_dir = os.path.join(sdss_dir, "stack", "X_AGN")
+archetype_dir = os.path.join(sdss_dir, "archetypes", version)
 
-zmin = float(sys.argv[1])
-zmax = float(sys.argv[2])
-gal_type = sys.argv[3]
-# ELG, LRG, X_AGN, QSO
+logwlmin = 2.9. 
+logwlmax = 4.0. 
+d_lambda = 0.0001 
+masterwave = 10**n.arange(logwlmin, logwlmax, d_lambda) 
 
-Nspec_max = 3000
+def stack_it(specList ):
+ outfile = join(spec_dir, os.path.basename(specList)[:-4]+".stack")
+ print(outfile)
+ test_D = n.loadtxt(specList, unpack=True)
+ print(len(test_D[0]))
+ if len(test_D[0])>10:
+  stack=sse.SpectraStackingEBOSS(specList, outfile )
+  stack.createStackMatrix()
+  stack.stackSpectra()
+  return stack
 
-name = "sdss_"+gal_type+"_zmin_"+str(int(10*zmin)).zfill(2)+"_zmax_"+str(int(10*zmax)).zfill(2)+"_Nlt_"+str(int(Nspec_max))
+file_list = n.array([
+	os.path.join(stack_dir, "full_BLAGN_zmin_00_zmax_50.asc" ) ,
+	os.path.join(stack_dir, "full_BLAZAR_zmin_00_zmax_50.asc") ,
+	os.path.join(stack_dir, "full_BLLAC_zmin_00_zmax_50.asc" ) ,
+	os.path.join(stack_dir, "full_GALAXY_zmin_00_zmax_50.asc") ,
+	os.path.join(stack_dir, "full_NLAGN_zmin_00_zmax_50.asc" ) ,
+	os.path.join(stack_dir, "full_NONE_zmin_00_zmax_50.asc"  ) ,
+	os.path.join(stack_dir, "full_QSO_zmin_00_zmax_50.asc"   ) ,
+	os.path.join(stack_dir, "full_STAR_zmin_00_zmax_50.asc"  ) ])
 
-print(gal_type)
-print(name)
-sn_min = float(sys.argv[4])
+stack = {}
+for file_input in file_list:
+ stack[file_input] = stack_it(file_input)
+
+sn_min = 2.
 
 out_dir = os.path.join( os.environ['OBS_REPO'], 'archetypes', version, gal_type )
 
