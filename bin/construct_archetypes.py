@@ -148,7 +148,6 @@ def make_archetype(stack, file_input, sn_min = 2.):
 stack = {}
 for file_input in file_list:
 	stack[file_input] = stack_it(file_input)
-	make_archetype(stack, file_input, sn_min = 1.)
 	make_archetype(stack, file_input, sn_min = 1.5)
 	make_archetype(stack, file_input, sn_min = 2.)
 	make_archetype(stack, file_input, sn_min = 2.5)
