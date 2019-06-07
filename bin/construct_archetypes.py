@@ -118,7 +118,7 @@ def make_archetype(stack, file_input, sn_min = 2.):
 	fig.subplots_adjust(hspace=0)
 	for i in n.arange(0,imax,1):
 		ax = fig.add_subplot(imax+1,1,i+1)
-		ax.plot(masterwave[::3], archetype_median[isort[i],:][::3] , label = 'nRep=' + str(n_rep[isort[i]) )
+		ax.plot(masterwave[::3], archetype_median[isort[i],:][::3] , label = 'nRep=' + str(n_rep[isort[i]]) )
 		ax.set_xlim(masterwave[10], masterwave[-10])
 		#ax.set_ylim(-0.1, 3)
 		ax.set_xticks([])
