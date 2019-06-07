@@ -32,9 +32,9 @@ def stack_it(specList ):
 
 file_list = n.array([
 	#os.path.join(stack_dir, "full_BLAZAR_zmin_00_zmax_50.asc") ,
-	os.path.join(stack_dir, "full_BLLAC_zmin_00_zmax_50.asc" ) ,
-	os.path.join(stack_dir, "full_NLAGN_zmin_00_zmax_50.asc" ) ,
-	os.path.join(stack_dir, "full_STAR_zmin_00_zmax_50.asc"  ) ,
+	#os.path.join(stack_dir, "full_BLLAC_zmin_00_zmax_50.asc" ) ,
+	#os.path.join(stack_dir, "full_NLAGN_zmin_00_zmax_50.asc" ) ,
+	#os.path.join(stack_dir, "full_STAR_zmin_00_zmax_50.asc"  ) ,
 	os.path.join(stack_dir, "full_BLAGN_zmin_00_zmax_50.asc" ) ,
 	os.path.join(stack_dir, "full_GALAXY_zmin_00_zmax_50.asc") ,
 	os.path.join(stack_dir, "full_QSO_zmin_00_zmax_50.asc"   )  ])
@@ -160,5 +160,5 @@ for file_input in file_list:
 	stack[file_input] = stack_it(file_input)
 	make_archetype(stack, file_input, percentile=10, sn_min = 2.)
 	make_archetype(stack, file_input, percentile=15, sn_min = 2.)
-	make_archetype(stack, file_input, percentile=20, sn_min = 2.)
+	make_archetype(stack, file_input, percentile=5, sn_min = 2.)
 	#make_archetype(stack, file_input, percentile=20, sn_min = 4.)
