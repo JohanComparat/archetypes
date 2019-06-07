@@ -159,6 +159,6 @@ stack = {}
 for file_input in file_list:
 	stack[file_input] = stack_it(file_input)
 	make_archetype(stack, file_input, percentile=10, sn_min = 2.)
+	make_archetype(stack, file_input, percentile=15, sn_min = 2.)
 	make_archetype(stack, file_input, percentile=20, sn_min = 2.)
-	make_archetype(stack, file_input, percentile=30, sn_min = 2.)
 	#make_archetype(stack, file_input, percentile=20, sn_min = 4.)
