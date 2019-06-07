@@ -26,19 +26,18 @@ def stack_it(specList ):
  print(len(test_D[0]))
  if len(test_D[0])>10:
   stack=sse.SpectraStackingEBOSS(specList, outfile )
-  #stack.createStackMatrix()
-  #stack.stackSpectra()
+  stack.createStackMatrix()
+  stack.stackSpectra()
   return stack
 
 file_list = n.array([
-	os.path.join(stack_dir, "full_BLAGN_zmin_00_zmax_50.asc" ) ,
-	os.path.join(stack_dir, "full_BLAZAR_zmin_00_zmax_50.asc") ,
+	#os.path.join(stack_dir, "full_BLAZAR_zmin_00_zmax_50.asc") ,
 	os.path.join(stack_dir, "full_BLLAC_zmin_00_zmax_50.asc" ) ,
-	os.path.join(stack_dir, "full_GALAXY_zmin_00_zmax_50.asc") ,
 	os.path.join(stack_dir, "full_NLAGN_zmin_00_zmax_50.asc" ) ,
-	os.path.join(stack_dir, "full_NONE_zmin_00_zmax_50.asc"  ) ,
-	os.path.join(stack_dir, "full_QSO_zmin_00_zmax_50.asc"   ) ,
-	os.path.join(stack_dir, "full_STAR_zmin_00_zmax_50.asc"  ) ])
+	os.path.join(stack_dir, "full_STAR_zmin_00_zmax_50.asc"  ) ,
+	os.path.join(stack_dir, "full_BLAGN_zmin_00_zmax_50.asc" ) ,
+	os.path.join(stack_dir, "full_GALAXY_zmin_00_zmax_50.asc") ,
+	os.path.join(stack_dir, "full_QSO_zmin_00_zmax_50.asc"   )  ])
 
 
 ###############################################
@@ -47,7 +46,7 @@ file_list = n.array([
 ###############################################
 ###############################################
 class ObjIds:
-	def __init__(self, imax, iuse):
+	def __init__(self, imax, iuse, n_rep):
 		self.imax = imax
 		self.iuse = iuse
 		self.n_rep = n_rep
@@ -116,12 +115,13 @@ def make_archetype(stack, file_input, sn_min = 2.):
 	p.clf()
 	fig = p.figure(figsize=(10,imax*5))
 	fig.subplots_adjust(hspace=0)
+	p.title(out_name)
 	for i in n.arange(0,imax,1):
-		ax = fig.add_subplot(imax+1,1,i+1)
+		ax = fig.add_subplot(imax,1,i+1)
 		ax.plot(masterwave[::3], archetype_median[isort[i],:][::3] , label = 'nRep=' + str(n_rep[isort[i]]) )
 		ax.set_xlim(masterwave[10], masterwave[-10])
 		#ax.set_ylim(-0.1, 3)
-		ax.set_xticks([])
+		#ax.set_xticks([])
 		ax.axvline(1215, color='b', ls='dashed', label='1215 Lya')
 		ax.axvline(1546, color='c', ls='dashed', label='1546 CIV')
 		ax.axvline(2800, color='m', ls='dashed', label='2800 MgII')
@@ -132,8 +132,9 @@ def make_archetype(stack, file_input, sn_min = 2.):
 		ax.grid()
 		ax.legend(frameon=False, loc=0)
 
-
-	fig.savefig( os.path.join(archetype_dir, "figure_archetypes_"+out_name +".png") )
+	p.xlabel('Angstrom')
+	p.tight_layout()
+	p.savefig( os.path.join(archetype_dir, "figure_archetypes_"+out_name +".png") )
 	p.clf()
 
 	n.savetxt(os.path.join(archetype_dir, "archetypes_"+out_name+".txt")   , n.vstack((masterwave, archetype_median)))
@@ -145,9 +146,11 @@ def make_archetype(stack, file_input, sn_min = 2.):
 
 
 stack = {}
-#for file_input in file_list:
-file_input = file_list[2]
-stack[file_input] = stack_it(file_input)
-make_archetype(stack, file_input, sn_min = 2.)
-#n.savetxt(os.path.join('..', 'archetypes_v0', "archetypes.txt")   , n.vstack((masterwave, archetype_median)))
-# DATA = n.loadtxt(os.path.join('..', 'archetypes_v0', "archetypes.txt") )
+for file_input in file_list:
+	stack[file_input] = stack_it(file_input)
+	make_archetype(stack, file_input, sn_min = 1.)
+	make_archetype(stack, file_input, sn_min = 1.5)
+	make_archetype(stack, file_input, sn_min = 2.)
+	make_archetype(stack, file_input, sn_min = 2.5)
+	make_archetype(stack, file_input, sn_min = 3.)
+	make_archetype(stack, file_input, sn_min = 4.)
